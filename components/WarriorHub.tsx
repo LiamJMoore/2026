@@ -101,7 +101,7 @@ export const WarriorHub: React.FC = () => {
                             <ul className="space-y-3 font-mono text-sm text-cyan-500/80 grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {["NEVER SELL FOR LOSS", "RAID TARGETS DAILY", "TRUST NO DEVS. TRUST CODE.", "HOLD UNTIL 2063"].map((item, i) => (
                                     <li key={i} className="flex gap-2 items-center justify-center md:justify-start">
-                                        <span className="text-neon-cyan">></span>
+                                        <span className="text-neon-cyan">&gt;</span>
                                         <span className="hover:text-white transition-colors cursor-default">{item}</span>
                                     </li>
                                 ))}
