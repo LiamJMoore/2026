@@ -127,9 +127,13 @@ export const getHolderCount = async (): Promise<number> => {
 
 export const getJupPrice = async (tokenId: string): Promise<number> => {
     try {
-        const response = await fetch(`https://price.jup.ag/v6/price?ids=${tokenId}`);
+        const response = await fetch(`https://api.jup.ag/price/v2?ids=${tokenId}`);
+        if (!response.ok) {
+            throw new Error(`Jupiter API Error: ${response.status} ${response.statusText}`);
+        }
         const data = await response.json();
-        return data.data?.[tokenId]?.price || 0;
+        const priceStr = data.data?.[tokenId]?.price;
+        return priceStr ? parseFloat(priceStr) : 0;
     } catch (error) {
         console.error("Failed to fetch Jupiter price:", error);
         return 0;
@@ -139,7 +143,7 @@ export const getJupPrice = async (tokenId: string): Promise<number> => {
 export const getTokenStats = async (): Promise<TokenStats | null> => {
     try {
         const [dexResponse, holderCount, jupPrice] = await Promise.all([
-            fetch(`https://api.dexscreener.com/latest/dex/tokens/${CA}`).then(res => res.json()),
+            fetch(`https://api.dexscreener.com/latest/dex/tokens/${CA}`).then(res => res.json()).catch(e => ({ pairs: [] })),
             getHolderCount(),
             getJupPrice(CA)
         ]);
@@ -154,6 +158,15 @@ export const getTokenStats = async (): Promise<TokenStats | null> => {
                 price: price,
                 marketCap: price * 1000000000, // Calc MC based on Jup price if avail
                 liquidity: pair.liquidity?.usd || 0
+            };
+        } else if (jupPrice > 0) {
+            // Fallback if DexScreener is down but Jup is up
+            return {
+                supply: 1000000000,
+                holders: holderCount,
+                price: jupPrice,
+                marketCap: jupPrice * 1000000000,
+                liquidity: 0
             };
         }
         return null;
