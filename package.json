@@ -1,6 +1,6 @@
 {
   "name": "white-whale-command-center",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "dependencies": {
     "framer-motion": "^10.18.0",
@@ -21,5 +21,17 @@
     "start": "vite",
     "build": "vite build",
     "preview": "vite preview"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
