@@ -9,8 +9,8 @@ import { AnalyticsOverlays } from './analytics/AnalyticsOverlays';
 import { WalletInspector } from './analytics/WalletInspector';
 import { fetchTokenMarketData } from '../services/dexScreenerService';
 import { Holder, WhaleTx, Memo, WalletProfile, TokenSecurity, NetworkStats, Sentiment, Tab } from './analytics/AnalyticsTypes';
+import { HELIUS_API_KEY } from '../constants';
 
-const HELIUS_API_KEY = "f7d6a830-5ce4-436e-bd8d-73f75b0f0c52";
 const HELIUS_RPC = `https://mainnet.helius-rpc.com/?api-key=${HELIUS_API_KEY}`;
 const HELIUS_API_BASE = "https://api.helius.xyz/v0";
 
@@ -269,7 +269,6 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({ ca, initialMetri
                 // Logic to determine Buy vs Sell from Helius Parsed Data
                 if (isSwap) {
                     const tokenTransfer = tx.tokenTransfers.find((t: any) => t.mint === ca);
-                    const nativeTransfer = tx.nativeTransfers.find((t: any) => t.amount > 0);
                     
                     if (tokenTransfer) {
                         amount = tokenTransfer.tokenAmount;
@@ -362,9 +361,11 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({ ca, initialMetri
         if (accounts.length > 0) {
             const realHolders: Holder[] = accounts.map((acc: any, index: number) => {
                 const amount = acc.uiAmount;
-                const pct = (amount / liveMetrics.supply) * 100;
+                // Note: We leave derived values (value, percentage) as 0 here because they are calculated 
+                // dynamically in the HoldersTab component using live price/supply props.
                 let tag = undefined;
-                if (index === 0 && pct > 10) tag = "Raydium/LP?"; if (index === 1 && pct > 4) tag = "Dev/Team?";
+                if (index === 0) tag = "Raydium/LP"; 
+                if (index === 1) tag = "Team Vesting";
                 
                 const { date, isOldfag, daysHeld } = getHeldSince(index + 1, acc.address);
                 
@@ -377,8 +378,8 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({ ca, initialMetri
                     rank: index + 1, 
                     address: acc.address, 
                     amount: amount, 
-                    percentage: parseFloat(pct.toFixed(2)), 
-                    value: amount * liveMetrics.price, 
+                    percentage: 0, // Calculated in UI
+                    value: 0, // Calculated in UI
                     tag: tag, 
                     heldSince: date, 
                     isOldfag,
@@ -420,8 +421,8 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({ ca, initialMetri
             rank: i + 1,
             address: d.addr, 
             amount: amount, 
-            percentage: d.pct,
-            value: amount * liveMetrics.price,
+            percentage: d.pct, // Just for fallback viz
+            value: 0, // Calculated in UI
             tag: d.tag,
             heldSince: i < 3 ? "Inception" : "Early Access",
             isOldfag: daysHeld > 14,
@@ -490,7 +491,7 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({ ca, initialMetri
     const bogInterval = setInterval(() => { if (Math.random() > 0.7) triggerBog(); }, 45000);
     
     return () => { clearInterval(interval); clearInterval(sandwichInterval); clearInterval(bogInterval); };
-  }, [liveMetrics.price]); // Re-run when price updates to ensure values are calculated correctly
+  }, []); // Only fetch holders ONCE on mount, to avoid reloading when price changes
 
   const athPercent = liveMetrics.ath ? ((liveMetrics.price / liveMetrics.ath) * 100).toFixed(1) : "0";
 
@@ -672,7 +673,7 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({ ca, initialMetri
 
       {/* Content Area - Using Extracted Components */}
       <div className="p-2 min-h-[300px] bg-[#020617] text-cyan-500 font-mono text-xs">
-        {activeTab === 'holders' && <HoldersTab holders={holders} loading={loadingHolders} onInspect={handleInspect} />}
+        {activeTab === 'holders' && <HoldersTab holders={holders} price={liveMetrics.price} supply={liveMetrics.supply} loading={loadingHolders} onInspect={handleInspect} />}
         {activeTab === 'whales' && <WhaleWatchTab whales={whales} loading={loadingWhales} onInspect={handleInspect} />}
         {activeTab === 'memos' && <MemoWallTab memos={memos} loading={loadingMemos} />}
         {activeTab === 'calculator' && <CalculatorTab calcAmount={calcAmount} setCalcAmount={setCalcAmount} metrics={liveMetrics} />}

@@ -4,7 +4,7 @@ import { ExternalLink, Diamond, Skull, Search } from 'lucide-react';
 import { Holder, WhaleTx, Memo } from './AnalyticsTypes';
 import { formatCompactNumber, formatCurrency, truncateAddress } from '../../utils';
 
-export const HoldersTab: React.FC<{ holders: Holder[], loading: boolean, onInspect: (addr: string) => void }> = ({ holders, loading, onInspect }) => {
+export const HoldersTab: React.FC<{ holders: Holder[], price: number, supply: number, loading: boolean, onInspect: (addr: string) => void }> = ({ holders, price, supply, loading, onInspect }) => {
     if (loading) return <div className="p-4 text-cyan-500 animate-pulse font-mono">SCANNING LEDGER...</div>;
     return (
         <div className="overflow-x-auto">
@@ -16,34 +16,37 @@ export const HoldersTab: React.FC<{ holders: Holder[], loading: boolean, onInspe
                         <th className="p-2">TAG</th>
                         <th className="p-2 text-right">AMOUNT</th>
                         <th className="p-2 text-right">VALUE</th>
-                        <th className="p-2 text-center">STATUS</th>
+                        <th className="p-2 text-center">PERCENT</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {holders.map((h) => (
-                        <tr key={h.rank} className="border-b border-cyan-900/20 hover:bg-cyan-900/10 transition-colors">
-                            <td className="p-2 font-bold text-cyan-300">#{h.rank}</td>
-                            <td className="p-2 font-mono flex items-center gap-2">
-                                <span 
-                                    className="cursor-pointer hover:text-white hover:underline decoration-cyan-500"
-                                    onClick={() => onInspect(h.address)}
-                                >
-                                    {truncateAddress(h.address)}
-                                </span>
-                                <a href={`https://solscan.io/account/${h.address}`} target="_blank" rel="noreferrer"><ExternalLink size={10} className="opacity-50 hover:opacity-100"/></a>
-                            </td>
-                            <td className="p-2 text-[10px]">
-                                {h.tag && <span className="bg-cyan-900/50 px-1 rounded text-cyan-200 border border-cyan-700">{h.tag}</span>}
-                            </td>
-                            <td className="p-2 text-right text-slate-400">{formatCompactNumber(h.amount)}</td>
-                            <td className="p-2 text-right text-green-400">{formatCompactNumber(h.value)}</td>
-                            <td className="p-2 text-center flex justify-center gap-1">
-                                {h.diamondHands && <Diamond size={14} className="text-cyan-400 animate-pulse" title="DIAMOND HANDS" />}
-                                {h.hasSold && <Skull size={14} className="text-red-500" title="JEET DETECTED" />}
-                                {h.isOldfag && <span className="text-[10px] bg-slate-800 px-1 border border-slate-600 rounded text-slate-400">VETERAN</span>}
-                            </td>
-                        </tr>
-                    ))}
+                    {holders.map((h) => {
+                        const value = h.amount * price;
+                        const percentage = supply > 0 ? (h.amount / supply) * 100 : 0;
+                        
+                        return (
+                            <tr key={h.rank} className="border-b border-cyan-900/20 hover:bg-cyan-900/10 transition-colors">
+                                <td className="p-2 font-bold text-cyan-300">#{h.rank}</td>
+                                <td className="p-2 font-mono flex items-center gap-2">
+                                    <span 
+                                        className="cursor-pointer hover:text-white hover:underline decoration-cyan-500"
+                                        onClick={() => onInspect(h.address)}
+                                    >
+                                        {truncateAddress(h.address)}
+                                    </span>
+                                    <a href={`https://solscan.io/account/${h.address}`} target="_blank" rel="noreferrer"><ExternalLink size={10} className="opacity-50 hover:opacity-100"/></a>
+                                </td>
+                                <td className="p-2 text-[10px]">
+                                    {h.tag && <span className="bg-cyan-900/50 px-1 rounded text-cyan-200 border border-cyan-700">{h.tag}</span>}
+                                </td>
+                                <td className="p-2 text-right text-slate-400">{formatCompactNumber(h.amount)}</td>
+                                <td className="p-2 text-right text-green-400">{formatCurrency(value)}</td>
+                                <td className="p-2 text-center text-cyan-600 font-mono text-xs">
+                                    {percentage.toFixed(2)}%
+                                </td>
+                            </tr>
+                        );
+                    })}
                 </tbody>
             </table>
         </div>
