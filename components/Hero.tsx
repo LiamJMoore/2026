@@ -34,7 +34,7 @@ export const Hero: React.FC = () => {
     };
 
     return (
-        <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+        <section id="hero" className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden pt-20">
             {/* Cinematic Background Layer */}
             <div className="absolute inset-0 z-0">
                 <img 
@@ -90,7 +90,7 @@ export const Hero: React.FC = () => {
                 </motion.div>
 
                 {/* Main Headline */}
-                <motion.h1 variants={itemVariants} className="font-display text-5xl md:text-8xl font-black text-white mb-8 leading-tight drop-shadow-2xl">
+                <motion.h1 variants={itemVariants} className="font-display text-4xl sm:text-5xl md:text-8xl font-black text-white mb-8 leading-tight drop-shadow-2xl">
                     <div className="glitch-text" data-text="THE OLD WAY">THE OLD WAY</div>
                     <div className="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan via-cyan-400 to-hologram-pink glitch-text" data-text="IS FINISHED">
                         IS FINISHED
@@ -103,14 +103,14 @@ export const Hero: React.FC = () => {
                 </motion.p>
 
                 {/* CTA Buttons */}
-                <motion.div variants={itemVariants} className="flex flex-col md:flex-row justify-center gap-6 mb-16">
+                <motion.div variants={itemVariants} className="flex flex-col md:flex-row items-center justify-center gap-6 mb-16 w-full">
                     <motion.a 
                         whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(0,243,255,0.5)" }}
                         whileTap={{ scale: 0.95 }}
                         href={JUPITER_URL}
                         target="_blank"
                         rel="noreferrer"
-                        className="group relative px-10 py-5 bg-neon-cyan/5 border border-neon-cyan/50 overflow-hidden rounded-sm"
+                        className="group relative px-10 py-5 bg-neon-cyan/5 border border-neon-cyan/50 overflow-hidden rounded-sm w-full md:w-auto"
                     >
                         <div className="absolute inset-0 w-1 bg-neon-cyan/50 group-hover:w-full transition-all duration-300 opacity-20"></div>
                         <span className="relative font-display font-bold text-neon-cyan group-hover:text-white text-lg tracking-wider flex items-center justify-center gap-2">
@@ -124,7 +124,7 @@ export const Hero: React.FC = () => {
                         href="https://t.me/WhiteWhaleMeme"
                         target="_blank"
                         rel="noreferrer"
-                        className="px-10 py-5 border border-slate-700 bg-slate-900/50 backdrop-blur transition-all rounded-sm"
+                        className="px-10 py-5 border border-slate-700 bg-slate-900/50 backdrop-blur transition-all rounded-sm w-full md:w-auto flex items-center justify-center"
                     >
                         <span className="font-display font-bold text-white text-lg tracking-wider">JOIN TELEGRAM</span>
                     </motion.a>
@@ -142,18 +142,18 @@ export const Hero: React.FC = () => {
                         <div className="absolute -bottom-1 -left-1 w-3 h-3 border-b-2 border-l-2 border-cyan-700 group-hover:border-neon-cyan transition-colors"></div>
                         <div className="absolute -bottom-1 -right-1 w-3 h-3 border-b-2 border-r-2 border-cyan-700 group-hover:border-neon-cyan transition-colors"></div>
                         
-                        <div className="flex flex-col md:flex-row items-center justify-between gap-4 p-4 cursor-pointer" onClick={copyToClipboard}>
+                        <div className="flex flex-row items-center justify-between gap-4 p-4 cursor-pointer" onClick={copyToClipboard}>
                             <div className="flex items-center gap-4 w-full overflow-hidden">
-                                <div className="p-2 bg-cyan-950/50 rounded border border-cyan-800 group-hover:border-neon-cyan transition-colors">
+                                <div className="p-2 bg-cyan-950/50 rounded border border-cyan-800 group-hover:border-neon-cyan transition-colors shrink-0">
                                     <Terminal size={20} className="text-neon-cyan" />
                                 </div>
-                                <div className="font-mono text-sm text-cyan-200/70 truncate text-left flex-1">
+                                <div className="font-mono text-sm text-cyan-200/70 truncate text-left flex-1 min-w-0">
                                     <div className="text-[10px] text-cyan-500 uppercase tracking-widest mb-1">Contract Address</div>
-                                    <span className="text-white text-base group-hover:text-neon-cyan transition-colors tracking-wider shadow-neon">{CA}</span>
+                                    <span className="text-white text-base group-hover:text-neon-cyan transition-colors tracking-wider shadow-neon truncate block">{CA}</span>
                                 </div>
                             </div>
                             <button 
-                                className="text-cyan-400 hover:text-white px-4 py-2 border border-transparent hover:border-cyan-700 rounded transition-all bg-cyan-950/30"
+                                className="text-cyan-400 hover:text-white px-4 py-2 border border-transparent hover:border-cyan-700 rounded transition-all bg-cyan-950/30 shrink-0"
                                 aria-label="Copy Contract Address"
                             >
                                 {copied ? <Check className="text-green-400" /> : <Copy size={18} />}
