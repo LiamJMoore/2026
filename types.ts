@@ -1,4 +1,5 @@
 
+
 export interface TokenStats {
     supply: number;
     holders: number;
@@ -36,10 +37,44 @@ export interface TreasuryPortfolio {
     totalValueUsd: number;
 }
 
+export interface MarketPairData {
+    address: string;
+    url: string;
+    dexId: string;
+    priceUsd: string;
+    liquidity?: {
+        usd: number;
+    };
+    volume?: {
+        h24: number;
+    };
+    pairLabel?: string;
+}
+
 export enum SectionId {
     HERO = 'hero',
     MANIFESTO = 'manifesto',
     DASHBOARD = 'dashboard',
     WARRIOR_HUB = 'warrior-hub',
     GALLERY = 'gallery',
+}
+
+// --- SERVICE RECORD TYPES ---
+export type Rank = 'KRILL' | 'TRENCH_WARRIOR' | 'ABYSSAL_TITAN';
+
+export interface Medal {
+    id: string;
+    name: string;
+    icon: string; // Lucide icon name or emoji
+    description: string;
+    unlocked: boolean;
+}
+
+export interface ServiceProfile {
+    address: string;
+    rank: Rank;
+    joinDate: string;
+    daysHeld: number;
+    tokenBalance: number;
+    medals: Medal[];
 }

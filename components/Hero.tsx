@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { CA, IMAGES, JUPITER_URL } from '../constants';
 import { Copy, Check, Terminal, Play } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 
 export const Hero: React.FC = () => {
     const [copied, setCopied] = useState(false);
@@ -13,7 +13,7 @@ export const Hero: React.FC = () => {
         setTimeout(() => setCopied(false), 2000);
     };
 
-    const containerVariants = {
+    const containerVariants: Variants = {
         hidden: { opacity: 0 },
         visible: {
             opacity: 1,
@@ -24,7 +24,7 @@ export const Hero: React.FC = () => {
         }
     };
 
-    const itemVariants = {
+    const itemVariants: Variants = {
         hidden: { y: 30, opacity: 0 },
         visible: { 
             y: 0, 

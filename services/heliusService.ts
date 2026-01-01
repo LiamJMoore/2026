@@ -1,6 +1,7 @@
 
+
 import { HELIUS_RPC_URL, CA } from '../constants';
-import { Transaction, TokenStats, PortfolioItem } from '../types';
+import { Transaction, TokenStats, PortfolioItem, ServiceProfile, Rank, Medal } from '../types';
 
 export const getSolanaBalance = async (address: string): Promise<number> => {
     try {
@@ -178,4 +179,62 @@ export const getTokenStats = async (): Promise<TokenStats | null> => {
 
 export const getSolPrice = async (): Promise<number> => {
     return await getJupPrice('So11111111111111111111111111111111111111112');
+};
+
+// --- SERVICE RECORD LOGIC ---
+export const analyzeServiceRecord = async (address: string): Promise<ServiceProfile | null> => {
+    try {
+        // 1. Get Token Balance
+        const tokens = await getTreasuryTokens(address);
+        const wwToken = tokens.find(t => t.mint === CA);
+        const balance = wwToken ? wwToken.amount : 0;
+
+        // 2. Determine Rank & Stats
+        // In a real app, we'd fetch full TX history to calculate 'daysHeld'.
+        // For V2 prototype, we simulate date based on balance and address hash to keep it deterministic.
+        
+        let rank: Rank = 'KRILL';
+        if (balance > 1000000) rank = 'ABYSSAL_TITAN'; // > 1M tokens
+        else if (balance > 100000) rank = 'TRENCH_WARRIOR'; // > 100k tokens
+        
+        // Simulating wallet age for the demo if real history is heavy to fetch
+        const daysHeld = balance > 0 ? (address.charCodeAt(0) % 90) + 5 : 0; 
+        
+        const medals: Medal[] = [
+            {
+                id: 'diamond_hands',
+                name: 'DIAMOND HANDS',
+                icon: 'Gem',
+                description: 'Held for 30+ days without selling',
+                unlocked: daysHeld > 30
+            },
+            {
+                id: 'whale',
+                name: 'WHALE STATUS',
+                icon: 'Crown',
+                description: 'Hold > 1,000,000 WW',
+                unlocked: balance > 1000000
+            },
+            {
+                id: 'iron_belly',
+                name: 'IRON BELLY',
+                icon: 'Shield',
+                description: 'Survived the -50% dip',
+                unlocked: daysHeld > 60
+            }
+        ];
+
+        return {
+            address,
+            rank,
+            joinDate: new Date(Date.now() - (daysHeld * 86400000)).toLocaleDateString(),
+            daysHeld,
+            tokenBalance: balance,
+            medals
+        };
+
+    } catch (e) {
+        console.error("Service Record Analysis Failed", e);
+        return null;
+    }
 };

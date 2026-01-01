@@ -1,12 +1,14 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import { getSolanaBalance, getTokenStats, getSolPrice, getTreasuryTokens } from '../services/heliusService';
+import { fetchPairsData } from '../services/dexScreenerService';
 import { TREASURY_WALLET, DEX_URL, CA, MARKETS } from '../constants';
-import { TokenStats, TreasuryPortfolio } from '../types';
+import { TokenStats, TreasuryPortfolio, MarketPairData, Rank } from '../types';
 import { Activity, Shield, ExternalLink, Copy, Check, Wallet, Radar, Crosshair, Trophy, Zap, PlayCircle, RotateCcw, Link } from 'lucide-react';
 import { BarChart, Bar, ResponsiveContainer, Tooltip, PieChart, Pie, Cell } from 'recharts';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TokenAnalytics } from './TokenAnalytics';
+import { ServiceRecord } from './ServiceRecord';
 
 // Mock chart data for visuals
 const PRICE_DATA = [
@@ -206,7 +208,11 @@ const JeetDestroyerGame: React.FC = () => {
 export const Dashboard: React.FC = () => {
     const [portfolio, setPortfolio] = useState<TreasuryPortfolio>({ solBalance: 0, solValueUsd: 0, tokens: [], totalValueUsd: 0 });
     const [tokenStats, setTokenStats] = useState<TokenStats | null>(null);
+    const [marketPairs, setMarketPairs] = useState<MarketPairData[]>([]);
     const [copied, setCopied] = useState(false);
+    
+    // User Rank State for Gold Theme
+    const [userRank, setUserRank] = useState<Rank | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -242,8 +248,14 @@ export const Dashboard: React.FC = () => {
             }
         };
 
+        const fetchMarkets = async () => {
+            const pairs = await fetchPairsData(MARKETS);
+            setMarketPairs(pairs);
+        };
+
         fetchData();
-        const interval = setInterval(fetchData, 30000); 
+        fetchMarkets();
+        const interval = setInterval(() => { fetchData(); fetchMarkets(); }, 30000); 
         return () => clearInterval(interval);
     }, []);
 
@@ -269,14 +281,21 @@ export const Dashboard: React.FC = () => {
         visible: { opacity: 1, y: 0 }
     };
 
+    const isTitan = userRank === 'ABYSSAL_TITAN';
+
     return (
         <section id="dashboard" className="py-24 bg-deep-navy relative border-t border-cyan-900/30">
              {/* Background Grid */}
              <div className="absolute inset-0 bg-grid-pattern opacity-5 pointer-events-none"></div>
+             
+             {/* Global Gold Tint for Titans */}
+             {isTitan && (
+                 <div className="absolute inset-0 pointer-events-none bg-amber-500/5 mix-blend-overlay z-0 animate-pulse-slow"></div>
+             )}
 
              <div className="max-w-7xl mx-auto px-4 relative z-10">
                 {/* Section Header */}
-                <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-cyan-900/50 pb-4">
+                <div className={`flex flex-col md:flex-row justify-between items-end mb-12 border-b ${isTitan ? 'border-amber-500/50' : 'border-cyan-900/50'} pb-4 transition-colors duration-700`}>
                     <div>
                         <motion.h2 
                             initial={{ opacity: 0, x: -20 }}
@@ -284,18 +303,30 @@ export const Dashboard: React.FC = () => {
                             transition={{ duration: 0.6 }}
                             className="font-display text-4xl md:text-5xl font-bold text-white mb-2"
                         >
-                            TRANSPARENCY <span className="text-neon-cyan">ENGINE</span>
+                            TRANSPARENCY <span className={isTitan ? "text-amber-400 drop-shadow-[0_0_10px_rgba(245,158,11,0.5)]" : "text-neon-cyan"}>ENGINE</span>
                         </motion.h2>
-                        <p className="font-mono text-cyan-400/60 tracking-wider">REAL-TIME ON-CHAIN INTEL // HELIUS RPC LINKED</p>
+                        <p className={`font-mono tracking-wider transition-colors ${isTitan ? 'text-amber-500/60' : 'text-cyan-400/60'}`}>
+                            {isTitan ? 'ELITE ACCESS GRANTED // GOLD CLEARANCE' : 'REAL-TIME ON-CHAIN INTEL // HELIUS RPC LINKED'}
+                        </p>
                     </div>
-                    <div className="hidden md:flex items-center gap-2 text-neon-cyan font-mono text-sm">
+                    <div className={`hidden md:flex items-center gap-2 font-mono text-sm ${isTitan ? 'text-amber-400' : 'text-neon-cyan'}`}>
                         <span className="relative flex h-3 w-3">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-cyan opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-3 w-3 bg-neon-cyan"></span>
+                          <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${isTitan ? 'bg-amber-400' : 'bg-neon-cyan'}`}></span>
+                          <span className={`relative inline-flex rounded-full h-3 w-3 ${isTitan ? 'bg-amber-400' : 'bg-neon-cyan'}`}></span>
                         </span>
                         LIVE DATA STREAM
                     </div>
                 </div>
+                
+                {/* NEW: Service Record Section */}
+                <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="mb-8"
+                >
+                    <ServiceRecord onRankChange={setUserRank} />
+                </motion.div>
 
                 {/* Token Analytics Component */}
                 <div className="mb-12">
@@ -311,18 +342,18 @@ export const Dashboard: React.FC = () => {
                 >
                     
                     {/* 1. TREASURY HUD */}
-                    <motion.div variants={cardVariants} className="col-span-1 bg-black/40 backdrop-blur border border-cyan-800 p-1 relative group overflow-hidden hover:border-neon-cyan transition-colors duration-500">
+                    <motion.div variants={cardVariants} className={`col-span-1 bg-black/40 backdrop-blur border p-1 relative group overflow-hidden transition-colors duration-500 ${isTitan ? 'border-amber-900 hover:border-amber-500' : 'border-cyan-800 hover:border-neon-cyan'}`}>
                         {/* Scanline Overlay */}
-                        <div className="absolute inset-0 pointer-events-none opacity-10 bg-[linear-gradient(transparent_50%,rgba(0,243,255,0.1)_50%)] bg-[length:100%_4px]"></div>
-                        <div className="absolute top-0 left-0 w-full h-1 bg-neon-cyan/50 animate-scan"></div>
+                        <div className={`absolute inset-0 pointer-events-none opacity-10 bg-[linear-gradient(transparent_50%,${isTitan ? 'rgba(245,158,11,0.2)' : 'rgba(0,243,255,0.1)'}_50%)] bg-[length:100%_4px]`}></div>
+                        <div className={`absolute top-0 left-0 w-full h-1 animate-scan ${isTitan ? 'bg-amber-500/50' : 'bg-neon-cyan/50'}`}></div>
                         
                         <div className="p-6 h-full flex flex-col relative z-10">
                             <div className="flex items-center justify-between mb-6">
                                 <h3 className="font-display text-xl text-white flex items-center gap-2">
-                                    <Shield className="text-neon-cyan" size={20} />
+                                    <Shield className={isTitan ? "text-amber-400" : "text-neon-cyan"} size={20} />
                                     VAULT STATUS
                                 </h3>
-                                <span className="text-[10px] font-mono text-cyan-400 border border-cyan-800 px-2 py-1 rounded">SECURE</span>
+                                <span className={`text-[10px] font-mono border px-2 py-1 rounded ${isTitan ? 'text-amber-400 border-amber-800' : 'text-cyan-400 border-cyan-800'}`}>SECURE</span>
                             </div>
 
                             <div className="flex-1 flex flex-col justify-center items-center mb-6">
@@ -345,62 +376,99 @@ export const Dashboard: React.FC = () => {
                                     </ResponsiveContainer>
                                     {/* Center Text */}
                                     <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                                        <span className="text-cyan-400 text-xs font-mono">TOTAL VALUE</span>
+                                        <span className={`text-xs font-mono ${isTitan ? 'text-amber-500' : 'text-cyan-400'}`}>TOTAL VALUE</span>
                                         <span className="text-white font-display font-bold text-lg">{formatCompact(portfolio.totalValueUsd)}</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="space-y-3 font-mono text-sm border-t border-cyan-900 pt-4">
+                            <div className={`space-y-3 font-mono text-sm border-t pt-4 ${isTitan ? 'border-amber-900' : 'border-cyan-900'}`}>
                                 <div className="flex justify-between text-slate-300">
                                     <span>SOL HOLDINGS</span>
                                     <span className="text-white">{portfolio.solBalance.toFixed(2)} SOL</span>
                                 </div>
                                 <div className="flex justify-between text-slate-300">
                                     <span>$WW HOLDINGS</span>
-                                    <span className="text-white text-neon-cyan">{(portfolio.tokens.find(t=>t.mint===CA)?.amount || 0 / 1000000).toLocaleString()} WW</span>
+                                    <span className={`text-white ${isTitan ? 'text-amber-400' : 'text-neon-cyan'}`}>{(portfolio.tokens.find(t=>t.mint===CA)?.amount || 0 / 1000000).toLocaleString()} WW</span>
                                 </div>
                             </div>
 
                             {/* Address */}
-                            <div className="mt-4 bg-cyan-950/30 p-2 rounded border border-cyan-900 flex items-center justify-between cursor-pointer hover:border-neon-cyan transition-colors group/addr" onClick={copyTreasury}>
+                            <div className={`mt-4 p-2 rounded border flex items-center justify-between cursor-pointer transition-colors group/addr ${isTitan ? 'bg-amber-950/30 border-amber-900 hover:border-amber-400' : 'bg-cyan-950/30 border-cyan-900 hover:border-neon-cyan'}`} onClick={copyTreasury}>
                                 <div className="flex items-center gap-2 overflow-hidden">
-                                    <Wallet size={12} className="text-cyan-500" />
-                                    <span className="font-mono text-xs text-cyan-500 truncate group-hover/addr:text-cyan-200 transition-colors">{TREASURY_WALLET}</span>
+                                    <Wallet size={12} className={isTitan ? "text-amber-500" : "text-cyan-500"} />
+                                    <span className={`font-mono text-xs truncate group-hover/addr:text-white transition-colors ${isTitan ? 'text-amber-500' : 'text-cyan-500'}`}>{TREASURY_WALLET}</span>
                                 </div>
-                                {copied ? <Check size={12} className="text-green-500" /> : <Copy size={12} className="text-cyan-500" />}
+                                {copied ? <Check size={12} className="text-green-500" /> : <Copy size={12} className={isTitan ? "text-amber-500" : "text-cyan-500"} />}
                             </div>
 
-                            {/* Active Markets Links */}
-                            <div className="mt-6 pt-4 border-t border-cyan-900/50">
-                                <h4 className="font-mono text-[10px] text-cyan-600 mb-2 uppercase tracking-wider">Active Markets</h4>
-                                <div className="space-y-2">
-                                    {MARKETS.map((market, index) => (
+                            {/* Active Markets Links with Metrics */}
+                            <div className={`mt-6 pt-4 border-t ${isTitan ? 'border-amber-900/50' : 'border-cyan-900/50'}`}>
+                                <h4 className={`font-mono text-[10px] mb-2 uppercase tracking-wider flex justify-between items-center ${isTitan ? 'text-amber-600' : 'text-cyan-600'}`}>
+                                    <span>Active Liquidity Pools</span>
+                                    <span className="text-[9px] opacity-50">TVL / 24H VOL</span>
+                                </h4>
+                                <div className="space-y-1 max-h-[160px] overflow-y-auto custom-scrollbar pr-1">
+                                    {marketPairs.length > 0 ? marketPairs.map((pair) => (
                                         <a 
-                                            key={index}
-                                            href={`https://solscan.io/account/${market}`}
+                                            key={pair.address}
+                                            href={pair.url}
                                             target="_blank"
                                             rel="noreferrer"
-                                            className="flex items-center justify-between group/link hover:bg-cyan-950/30 p-1 rounded transition-colors"
+                                            className={`grid grid-cols-12 gap-2 items-center group/link p-2 rounded transition-colors border border-transparent ${isTitan ? 'hover:bg-amber-950/30 hover:border-amber-900/50' : 'hover:bg-cyan-950/30 hover:border-cyan-900/50'}`}
                                         >
-                                            <div className="flex items-center gap-2">
-                                                <div className="w-1.5 h-1.5 rounded-full bg-cyan-800 group-hover/link:bg-neon-cyan transition-colors"></div>
-                                                <span className="font-mono text-[10px] text-slate-400 group-hover/link:text-cyan-300 transition-colors truncate w-40">
-                                                    {market}
-                                                </span>
+                                            <div className="col-span-6 flex items-center gap-2 overflow-hidden">
+                                                <div className={`w-1.5 h-1.5 rounded-full transition-colors shrink-0 ${isTitan ? 'bg-amber-800 group-hover/link:bg-amber-400' : 'bg-cyan-800 group-hover/link:bg-neon-cyan'}`}></div>
+                                                <div className="flex flex-col min-w-0">
+                                                    <span className={`font-mono text-[10px] text-slate-300 transition-colors truncate font-bold ${isTitan ? 'group-hover/link:text-amber-200' : 'group-hover/link:text-cyan-200'}`}>
+                                                        {pair.dexId.toUpperCase()}
+                                                    </span>
+                                                    <span className="text-[9px] text-slate-500 truncate">{pair.pairLabel}</span>
+                                                </div>
                                             </div>
-                                            <ExternalLink size={10} className="text-cyan-800 group-hover/link:text-neon-cyan transition-colors" />
+                                            
+                                            <div className="col-span-6 flex items-center justify-end gap-3 text-right">
+                                                <div className="flex flex-col items-end">
+                                                    <span className="font-mono text-[10px] text-green-400">
+                                                        {pair.liquidity?.usd ? `$${(pair.liquidity.usd / 1000).toFixed(1)}k` : '--'}
+                                                    </span>
+                                                </div>
+                                                <div className="flex flex-col items-end">
+                                                     <span className={`font-mono text-[10px] ${isTitan ? 'text-amber-400' : 'text-cyan-400'}`}>
+                                                        {pair.volume?.h24 ? `$${(pair.volume.h24 / 1000).toFixed(1)}k` : '--'}
+                                                    </span>
+                                                </div>
+                                                <ExternalLink size={10} className={`transition-colors shrink-0 ${isTitan ? 'text-amber-800 group-hover/link:text-amber-400' : 'text-cyan-800 group-hover/link:text-neon-cyan'}`} />
+                                            </div>
                                         </a>
-                                    ))}
+                                    )) : (
+                                         MARKETS.map((market, index) => (
+                                            <a 
+                                                key={index}
+                                                href={`https://solscan.io/account/${market}`}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className={`flex items-center justify-between group/link p-2 rounded transition-colors ${isTitan ? 'hover:bg-amber-950/30' : 'hover:bg-cyan-950/30'}`}
+                                            >
+                                                <div className="flex items-center gap-2">
+                                                    <div className={`w-1.5 h-1.5 rounded-full transition-colors ${isTitan ? 'bg-amber-800 group-hover/link:bg-amber-400' : 'bg-cyan-800 group-hover/link:bg-neon-cyan'}`}></div>
+                                                    <span className={`font-mono text-[10px] text-slate-400 transition-colors truncate w-32 ${isTitan ? 'group-hover/link:text-amber-300' : 'group-hover/link:text-cyan-300'}`}>
+                                                        {market}
+                                                    </span>
+                                                </div>
+                                                <ExternalLink size={10} className={`transition-colors ${isTitan ? 'text-amber-800 group-hover/link:text-amber-400' : 'text-cyan-800 group-hover/link:text-neon-cyan'}`} />
+                                            </a>
+                                        ))
+                                    )}
                                 </div>
                             </div>
                         </div>
                     </motion.div>
 
                     {/* 2. METRICS HUD */}
-                    <motion.div variants={cardVariants} className="col-span-1 bg-black/40 backdrop-blur border border-cyan-800 p-6 flex flex-col relative group hover:border-neon-cyan transition-colors duration-500">
+                    <motion.div variants={cardVariants} className={`col-span-1 bg-black/40 backdrop-blur border p-6 flex flex-col relative group transition-colors duration-500 ${isTitan ? 'border-amber-800 hover:border-amber-500' : 'border-cyan-800 hover:border-neon-cyan'}`}>
                         <div className="absolute top-0 right-0 p-2 opacity-50">
-                             <Activity size={100} className="text-cyan-900/50" strokeWidth={1} />
+                             <Activity size={100} className={isTitan ? "text-amber-900/50" : "text-cyan-900/50"} strokeWidth={1} />
                         </div>
                         
                         <h3 className="font-display text-xl text-white mb-8 flex items-center gap-2 relative z-10">
@@ -412,15 +480,15 @@ export const Dashboard: React.FC = () => {
                             {[
                                 { label: "MARKET CAP", val: formatCurrency(tokenStats?.marketCap), border: "border-hologram-pink" },
                                 { label: "HOLDERS", val: tokenStats?.holders ? tokenStats.holders.toLocaleString() : '10,000+', border: "border-slate-600" },
-                                { label: "LIQUIDITY", val: formatCurrency(tokenStats?.liquidity), border: "border-neon-cyan" },
+                                { label: "LIQUIDITY", val: formatCurrency(tokenStats?.liquidity), border: isTitan ? "border-amber-400" : "border-neon-cyan" },
                                 { label: "PRICE", val: formatPrice(tokenStats?.price), border: "border-white" }
                             ].map((item, i) => (
                                 <motion.div 
                                     key={i}
                                     whileHover={{ scale: 1.05 }}
-                                    className={`bg-cyan-950/30 p-3 border-l-2 ${item.border}`}
+                                    className={`p-3 border-l-2 ${item.border} ${isTitan ? 'bg-amber-950/30' : 'bg-cyan-950/30'}`}
                                 >
-                                    <p className="text-[10px] font-mono text-cyan-400 mb-1">{item.label}</p>
+                                    <p className={`text-[10px] font-mono mb-1 ${isTitan ? 'text-amber-400' : 'text-cyan-400'}`}>{item.label}</p>
                                     <p className="text-white font-display text-lg">{item.val}</p>
                                 </motion.div>
                             ))}
@@ -429,23 +497,23 @@ export const Dashboard: React.FC = () => {
                         <div className="flex-1 min-h-[150px] relative z-10">
                              <ResponsiveContainer width="100%" height="100%">
                                 <BarChart data={PRICE_DATA}>
-                                    <Bar dataKey="val" fill="#00f3ff" radius={[2, 2, 0, 0]} animationDuration={1500} />
+                                    <Bar dataKey="val" fill={isTitan ? "#fbbf24" : "#00f3ff"} radius={[2, 2, 0, 0]} animationDuration={1500} />
                                     <Tooltip 
-                                        contentStyle={{ backgroundColor: '#020617', borderColor: '#0099ff', borderRadius: '4px' }}
-                                        itemStyle={{ color: '#00f3ff', fontFamily: 'Share Tech Mono' }}
-                                        cursor={{fill: 'rgba(0, 243, 255, 0.05)'}}
+                                        contentStyle={{ backgroundColor: '#020617', borderColor: isTitan ? '#f59e0b' : '#0099ff', borderRadius: '4px' }}
+                                        itemStyle={{ color: isTitan ? '#fbbf24' : '#00f3ff', fontFamily: 'Share Tech Mono' }}
+                                        cursor={{fill: isTitan ? 'rgba(245,158,11, 0.05)' : 'rgba(0, 243, 255, 0.05)'}}
                                     />
                                 </BarChart>
                             </ResponsiveContainer>
                         </div>
                         
-                        <a href={DEX_URL} target="_blank" rel="noreferrer" className="mt-4 flex items-center justify-center gap-2 text-xs font-mono text-cyan-500 hover:text-white transition-colors">
+                        <a href={DEX_URL} target="_blank" rel="noreferrer" className={`mt-4 flex items-center justify-center gap-2 text-xs font-mono hover:text-white transition-colors ${isTitan ? 'text-amber-500' : 'text-cyan-500'}`}>
                             FULL CHART ANALYSIS <ExternalLink size={12} />
                         </a>
                     </motion.div>
 
                     {/* 3. WAR GAMES HUD (Replaces Trench Feed) */}
-                    <motion.div variants={cardVariants} className="col-span-1 bg-black/40 backdrop-blur border border-cyan-800 p-0 flex flex-col h-[500px] lg:h-auto relative hover:border-neon-cyan transition-colors duration-500 overflow-hidden shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">
+                    <motion.div variants={cardVariants} className={`col-span-1 bg-black/40 backdrop-blur border p-0 flex flex-col h-[500px] lg:h-auto relative transition-colors duration-500 overflow-hidden shadow-[inset_0_0_20px_rgba(0,0,0,0.5)] ${isTitan ? 'border-amber-800 hover:border-amber-500' : 'border-cyan-800 hover:border-neon-cyan'}`}>
                          <div className="absolute top-0 right-0 p-2 z-10">
                             <Zap className="text-yellow-400 animate-pulse" size={16} />
                          </div>
@@ -453,7 +521,7 @@ export const Dashboard: React.FC = () => {
                             <Crosshair className="text-red-500" size={20} />
                             JEET DESTROYER
                         </h3>
-                        <p className="px-6 text-xs font-mono text-cyan-600 mb-4 pointer-events-none">TACTICAL SIMULATION // CLICK TARGETS</p>
+                        <p className={`px-6 text-xs font-mono mb-4 pointer-events-none ${isTitan ? 'text-amber-600' : 'text-cyan-600'}`}>TACTICAL SIMULATION // CLICK TARGETS</p>
                         
                         <div className="flex-1 w-full relative">
                             <JeetDestroyerGame />
