@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ChevronRight, Play } from 'lucide-react';
+import { ChevronRight, Play, FileText, Quote } from 'lucide-react';
 import { IMAGES, VISIONARY_URL } from '../constants';
 import { motion } from 'framer-motion';
 
@@ -26,56 +26,103 @@ export const Manifesto: React.FC = () => {
                     <p className="font-mono text-cyan-500/60 tracking-[0.3em] uppercase text-sm">Operation: Ethical Stewardship</p>
                 </div>
 
-                {/* Video Terminal */}
-                <motion.div 
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.8 }}
-                    viewport={{ once: true }}
-                    className="relative max-w-5xl mx-auto mb-20"
-                >
-                    {/* Decorative Frame */}
-                    <div className="absolute -inset-1 bg-gradient-to-b from-cyan-900 to-transparent opacity-50 rounded-lg blur-sm"></div>
-                    <div className="relative bg-black border border-cyan-800 rounded-lg overflow-hidden shadow-2xl">
-                        
-                        {/* Video Header UI */}
-                        <div className="bg-cyan-950/30 border-b border-cyan-900/50 p-3 flex justify-between items-center">
-                            <div className="flex gap-2">
-                                <div className="w-3 h-3 rounded-full bg-red-500/20 border border-red-500"></div>
-                                <div className="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500"></div>
-                                <div className="w-3 h-3 rounded-full bg-green-500/20 border border-green-500"></div>
+                {/* Video & Transcript Layout */}
+                <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 mb-20 max-w-6xl mx-auto">
+                    
+                    {/* Video Player */}
+                    <motion.div 
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.8 }}
+                        viewport={{ once: true }}
+                        className="lg:col-span-3 relative"
+                    >
+                        {/* Decorative Frame */}
+                        <div className="absolute -inset-1 bg-gradient-to-b from-cyan-900 to-transparent opacity-50 rounded-lg blur-sm"></div>
+                        <div className="relative bg-black border border-cyan-800 rounded-lg overflow-hidden shadow-2xl h-full flex flex-col">
+                            
+                            {/* Video Header UI */}
+                            <div className="bg-cyan-950/30 border-b border-cyan-900/50 p-3 flex justify-between items-center">
+                                <div className="flex gap-2">
+                                    <div className="w-3 h-3 rounded-full bg-red-500/20 border border-red-500"></div>
+                                    <div className="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500"></div>
+                                    <div className="w-3 h-3 rounded-full bg-green-500/20 border border-green-500"></div>
+                                </div>
+                                <div className="font-mono text-[10px] text-cyan-400 tracking-widest">TRANSMISSION_ID: WHITE_WHALE_ORIGIN</div>
                             </div>
-                            <div className="font-mono text-[10px] text-cyan-400 tracking-widest">TRANSMISSION_ID: WHITE_WHALE_ORIGIN</div>
-                        </div>
 
-                        {/* Video Player */}
-                        <div className="relative aspect-video bg-black group">
-                             <video 
-                                className="w-full h-full object-cover"
-                                controls
-                                poster={IMAGES.BANNER}
-                                preload="metadata"
-                            >
-                                <source src="/manifesto.mp4" type="video/mp4" /> 
-                                Your browser does not support the video tag.
-                            </video>
+                            {/* Video Player */}
+                            <div className="relative aspect-video bg-black group flex-1">
+                                 <video 
+                                    className="w-full h-full object-cover"
+                                    controls
+                                    poster={IMAGES.BANNER}
+                                    preload="metadata"
+                                >
+                                    <source src="/manifesto.mp4" type="video/mp4" /> 
+                                    Your browser does not support the video tag.
+                                </video>
 
-                            {/* Play Overlay (Only visible if native controls aren't used or before play, simplified here) */}
-                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none group-hover:bg-cyan-900/10 transition-colors">
-                                {/* Decorative crosshair */}
-                                <div className="absolute top-1/2 left-0 w-full h-[1px] bg-cyan-500/10"></div>
-                                <div className="absolute left-1/2 top-0 h-full w-[1px] bg-cyan-500/10"></div>
+                                {/* Play Overlay (Only visible if native controls aren't used or before play, simplified here) */}
+                                <div className="absolute inset-0 flex items-center justify-center pointer-events-none group-hover:bg-cyan-900/10 transition-colors">
+                                    {/* Decorative crosshair */}
+                                    <div className="absolute top-1/2 left-0 w-full h-[1px] bg-cyan-500/10"></div>
+                                    <div className="absolute left-1/2 top-0 h-full w-[1px] bg-cyan-500/10"></div>
+                                </div>
                             </div>
                         </div>
+                    </motion.div>
 
-                        {/* Transcript / Caption Area */}
-                        <div className="bg-black/80 p-6 border-t border-cyan-900/50">
-                             <p className="font-display text-xl md:text-2xl text-white text-center italic leading-relaxed">
-                                "The White Whale doesn't belong to a person. It belongs to a movement who simply demanded something better."
-                             </p>
-                        </div>
-                    </div>
-                </motion.div>
+                    {/* Transcript Terminal */}
+                    <motion.div 
+                        initial={{ opacity: 0, x: 20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                        viewport={{ once: true }}
+                        className="lg:col-span-2 flex flex-col h-full min-h-[400px]"
+                    >
+                         <div className="bg-black/80 border border-cyan-900/50 rounded-lg h-full p-6 relative overflow-hidden flex flex-col">
+                            <div className="absolute top-0 right-0 p-4 opacity-20"><FileText size={100} className="text-cyan-500"/></div>
+                            
+                            <h3 className="font-display text-lg text-white mb-4 flex items-center gap-2 border-b border-cyan-900/30 pb-2">
+                                <Quote size={16} className="text-neon-cyan"/> 
+                                TRANSCRIPT
+                            </h3>
+                            
+                            <div className="flex-1 overflow-y-auto pr-2 font-mono text-sm text-cyan-400/80 leading-relaxed space-y-4 custom-scrollbar">
+                                <p>
+                                    "The White Whale is a <span className="text-white font-bold">movement</span>. 
+                                    And movements don't belong to the person who lit the match. 
+                                    They belong to everyone who decides the old way ends here."
+                                </p>
+                                <p>
+                                    "The trenches have been treated like exit liquidity. 
+                                    Hyped. Harvested. Abandoned. And almost forgotten."
+                                </p>
+                                <div className="border-l-2 border-neon-cyan pl-3 py-1 my-2 bg-cyan-950/10">
+                                    <p className="text-white italic">"So we built a standard. No paid KOLs, ever. Radical transparency, always."</p>
+                                </div>
+                                <p>
+                                    "Every decision serves the long-term strategy. 
+                                    All revenue generated used for the direct benefit of the holders."
+                                </p>
+                                <p>
+                                    "You see... being 'built different' isn't just something you say. 
+                                    It's something you do. Every single day. Even when it's hard."
+                                </p>
+                                <p className="text-neon-cyan font-bold pt-2">
+                                    "The White Whale doesn't belong to a person... It belongs to a movement who simply demanded something better. 
+                                    We are all the $WHITEWHALE."
+                                </p>
+                            </div>
+                            
+                            <div className="mt-4 pt-3 border-t border-cyan-900/30 flex justify-between items-center text-[10px] text-slate-500 font-mono">
+                                <span>END_TRANSMISSION</span>
+                                <span className="animate-pulse">_</span>
+                            </div>
+                         </div>
+                    </motion.div>
+                </div>
 
                 {/* The 3 Pillars */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
