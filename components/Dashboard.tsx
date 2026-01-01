@@ -1,9 +1,9 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import { getSolanaBalance, getTokenStats, getSolPrice, getTreasuryTokens } from '../services/heliusService';
-import { TREASURY_WALLET, DEX_URL, CA } from '../constants';
+import { TREASURY_WALLET, DEX_URL, CA, MARKETS } from '../constants';
 import { TokenStats, TreasuryPortfolio } from '../types';
-import { Activity, Shield, ExternalLink, Copy, Check, Wallet, Radar, Crosshair, Trophy, Zap, PlayCircle, RotateCcw } from 'lucide-react';
+import { Activity, Shield, ExternalLink, Copy, Check, Wallet, Radar, Crosshair, Trophy, Zap, PlayCircle, RotateCcw, Link } from 'lucide-react';
 import { BarChart, Bar, ResponsiveContainer, Tooltip, PieChart, Pie, Cell } from 'recharts';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TokenAnalytics } from './TokenAnalytics';
@@ -369,6 +369,30 @@ export const Dashboard: React.FC = () => {
                                     <span className="font-mono text-xs text-cyan-500 truncate group-hover/addr:text-cyan-200 transition-colors">{TREASURY_WALLET}</span>
                                 </div>
                                 {copied ? <Check size={12} className="text-green-500" /> : <Copy size={12} className="text-cyan-500" />}
+                            </div>
+
+                            {/* Active Markets Links */}
+                            <div className="mt-6 pt-4 border-t border-cyan-900/50">
+                                <h4 className="font-mono text-[10px] text-cyan-600 mb-2 uppercase tracking-wider">Active Markets</h4>
+                                <div className="space-y-2">
+                                    {MARKETS.map((market, index) => (
+                                        <a 
+                                            key={index}
+                                            href={`https://solscan.io/account/${market}`}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            className="flex items-center justify-between group/link hover:bg-cyan-950/30 p-1 rounded transition-colors"
+                                        >
+                                            <div className="flex items-center gap-2">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-cyan-800 group-hover/link:bg-neon-cyan transition-colors"></div>
+                                                <span className="font-mono text-[10px] text-slate-400 group-hover/link:text-cyan-300 transition-colors truncate w-40">
+                                                    {market}
+                                                </span>
+                                            </div>
+                                            <ExternalLink size={10} className="text-cyan-800 group-hover/link:text-neon-cyan transition-colors" />
+                                        </a>
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     </motion.div>

@@ -27,7 +27,7 @@ export const Manifesto: React.FC = () => {
                 </div>
 
                 {/* Video & Transcript Layout */}
-                <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 mb-20 max-w-6xl mx-auto">
+                <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 mb-20 max-w-6xl mx-auto items-start">
                     
                     {/* Video Player */}
                     <motion.div 
@@ -39,7 +39,7 @@ export const Manifesto: React.FC = () => {
                     >
                         {/* Decorative Frame */}
                         <div className="absolute -inset-1 bg-gradient-to-b from-cyan-900 to-transparent opacity-50 rounded-lg blur-sm"></div>
-                        <div className="relative bg-black border border-cyan-800 rounded-lg overflow-hidden shadow-2xl h-full flex flex-col">
+                        <div className="relative bg-black border border-cyan-800 rounded-lg overflow-hidden shadow-2xl flex flex-col">
                             
                             {/* Video Header UI */}
                             <div className="bg-cyan-950/30 border-b border-cyan-900/50 p-3 flex justify-between items-center">
@@ -52,22 +52,16 @@ export const Manifesto: React.FC = () => {
                             </div>
 
                             {/* Video Player */}
-                            <div className="relative aspect-video bg-black group flex-1">
-                                 <video 
-                                    className="w-full h-full object-cover"
-                                    controls
-                                    poster={IMAGES.BANNER}
-                                    preload="metadata"
-                                >
-                                    <source src="/manifesto.mp4" type="video/mp4" /> 
-                                    Your browser does not support the video tag.
-                                </video>
-
-                                {/* Play Overlay (Only visible if native controls aren't used or before play, simplified here) */}
-                                <div className="absolute inset-0 flex items-center justify-center pointer-events-none group-hover:bg-cyan-900/10 transition-colors">
-                                    {/* Decorative crosshair */}
-                                    <div className="absolute top-1/2 left-0 w-full h-[1px] bg-cyan-500/10"></div>
-                                    <div className="absolute left-1/2 top-0 h-full w-[1px] bg-cyan-500/10"></div>
+                            <div className="relative bg-black group w-full">
+                                <div style={{ position: 'relative', width: '100%', height: '0px', paddingBottom: '56.250%' }}>
+                                    <iframe 
+                                        allow="fullscreen;autoplay" 
+                                        allowFullScreen 
+                                        height="100%" 
+                                        src="https://streamable.com/e/0gt1ir?autoplay=1" 
+                                        width="100%" 
+                                        style={{ border: 'none', width: '100%', height: '100%', position: 'absolute', left: '0px', top: '0px', overflow: 'hidden' }}
+                                    ></iframe>
                                 </div>
                             </div>
                         </div>
