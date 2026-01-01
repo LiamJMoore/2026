@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect } from 'react';
-import { NAV_LINKS, IMAGES } from '../constants';
+import { NAV_LINKS, IMAGES, JUPITER_URL } from '../constants';
 import { Menu, X } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
@@ -45,7 +46,7 @@ export const Navbar: React.FC = () => {
                             </a>
                         ))}
                         <a 
-                            href="https://raydium.io"
+                            href={JUPITER_URL}
                             target="_blank"
                             rel="noreferrer"
                             className="relative overflow-hidden bg-cyan-950/50 border border-neon-cyan/50 text-white font-display font-bold px-6 py-2 skew-x-[-12deg] transition-all hover:shadow-[0_0_20px_rgba(0,243,255,0.4)] hover:bg-neon-cyan/10 group"

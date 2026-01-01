@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { CA, IMAGES, DEX_URL } from '../constants';
+import { CA, IMAGES, JUPITER_URL } from '../constants';
 import { Copy, Check, Terminal, Play } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -107,7 +107,7 @@ export const Hero: React.FC = () => {
                     <motion.a 
                         whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(0,243,255,0.5)" }}
                         whileTap={{ scale: 0.95 }}
-                        href={DEX_URL}
+                        href={JUPITER_URL}
                         target="_blank"
                         rel="noreferrer"
                         className="group relative px-10 py-5 bg-neon-cyan/5 border border-neon-cyan/50 overflow-hidden rounded-sm"

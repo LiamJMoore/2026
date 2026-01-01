@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
-import { Twitter, Send } from 'lucide-react';
-import { X_URL } from '../constants';
+import { Twitter, Send, Users, Zap, Brain } from 'lucide-react';
+import { X_URL, JUPITER_URL, X_COMMUNITY_URL, VISIONARY_URL } from '../constants';
 import { motion } from 'framer-motion';
 
 export const WarriorHub: React.FC = () => {
@@ -45,49 +45,64 @@ export const WarriorHub: React.FC = () => {
                 <div className="flex flex-col items-center gap-12">
                     
                     {/* Community & Links - Now Centered and focused */}
-                    <div className="flex flex-col gap-8 w-full max-w-3xl">
+                    <div className="flex flex-col gap-8 w-full max-w-4xl">
                         
                         {/* Status Card */}
                         <motion.div 
                             initial={{ opacity: 0, scale: 0.9 }}
                             whileInView={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.6 }}
-                            className="bg-gradient-to-br from-trench-blue to-deep-navy p-8 border-l-4 border-neon-cyan shadow-[0_0_20px_rgba(0,243,255,0.1)] hover:shadow-[0_0_40px_rgba(0,243,255,0.2)] transition-shadow duration-500"
+                            className="bg-gradient-to-br from-trench-blue to-deep-navy p-8 border-l-4 border-neon-cyan shadow-[0_0_20px_rgba(0,243,255,0.1)] hover:shadow-[0_0_40px_rgba(0,243,255,0.2)] transition-shadow duration-500 relative"
                         >
-                            <h3 className="font-display text-2xl text-white mb-4 flex items-center gap-3 justify-center md:justify-start">
+                            <h3 className="font-display text-2xl text-white mb-6 flex items-center gap-3 justify-center md:justify-start">
                                 JOIN THE RESISTANCE
                             </h3>
-                            <p className="font-body text-slate-400 text-lg mb-8 leading-relaxed text-center md:text-left">
+                            
+                            <p className="font-body text-slate-400 text-lg mb-8 leading-relaxed text-center md:text-left max-w-2xl">
                                 The war is fought in the trenches of X and Telegram. 
                                 We coordinate raids, share memes, and hold the line against the jeets.
-                                <br/><br/>
-                                <span className="text-neon-cyan font-mono text-sm shadow-[0_0_10px_#00f3ff] animate-pulse block md:inline text-center md:text-left">STATUS: ACTIVE // DEPLOYING MEMETICS</span>
                             </p>
                             
-                            <div className="flex flex-col sm:flex-row gap-4">
-                                <motion.a 
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
+                            {/* Command Grid */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <SocialLink 
                                     href="https://t.me/WhiteWhaleMeme" 
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-mono font-bold py-4 px-6 transition-all clip-path-polygon hover:shadow-lg hover:shadow-blue-500/30 rounded-sm"
-                                >
-                                    <Send size={18} />
-                                    TELEGRAM
-                                </motion.a>
-                                <motion.a 
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
+                                    icon={Send} 
+                                    label="TELEGRAM" 
+                                    sub="JOIN THE CHAT" 
+                                    color="bg-blue-600/20 border-blue-600 hover:bg-blue-600 hover:text-white text-blue-400"
+                                />
+                                <SocialLink 
                                     href={X_URL} 
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="flex-1 flex items-center justify-center gap-2 bg-black hover:bg-slate-900 border border-slate-700 text-white font-mono font-bold py-4 px-6 transition-all rounded-sm"
-                                >
-                                    <Twitter size={18} />
-                                    TWITTER
-                                </motion.a>
+                                    icon={Twitter} 
+                                    label="MAIN COMMS" 
+                                    sub="@WhiteWhaleMeme" 
+                                    color="bg-white/10 border-white/20 hover:bg-white hover:text-black text-white" 
+                                />
+                                <SocialLink 
+                                    href={X_COMMUNITY_URL} 
+                                    icon={Users} 
+                                    label="X COMMUNITY" 
+                                    sub="THE TRENCH" 
+                                    color="bg-slate-800/50 border-slate-600 hover:border-slate-400 text-slate-300 hover:text-white" 
+                                />
+                                <SocialLink 
+                                    href={VISIONARY_URL} 
+                                    icon={Brain} 
+                                    label="VISIONARY" 
+                                    sub="@TheWhiteWhaleV2" 
+                                    color="bg-purple-900/20 border-purple-500 hover:bg-purple-500 hover:text-white text-purple-400" 
+                                />
+                                <SocialLink 
+                                    href={JUPITER_URL} 
+                                    icon={Zap} 
+                                    label="BUY ON JUP" 
+                                    sub="INITIATE SWAP" 
+                                    color="bg-neon-cyan/10 border-neon-cyan hover:bg-neon-cyan hover:text-black text-neon-cyan shadow-[0_0_10px_rgba(0,243,255,0.1)]" 
+                                    className="sm:col-span-2 lg:col-span-2"
+                                />
                             </div>
+
                         </motion.div>
 
                         {/* Operational Protocols */}
@@ -114,3 +129,23 @@ export const WarriorHub: React.FC = () => {
         </section>
     );
 };
+
+// Helper Component for the Links
+const SocialLink: React.FC<{ href: string, icon: React.ElementType, label: string, sub: string, color: string, className?: string }> = ({ href, icon: Icon, label, sub, color, className = "" }) => (
+    <motion.a 
+        whileHover={{ scale: 1.02, y: -2 }}
+        whileTap={{ scale: 0.98 }}
+        href={href}
+        target="_blank"
+        rel="noreferrer"
+        className={`flex items-center gap-4 p-4 border transition-all rounded-sm group ${color} ${className}`}
+    >
+        <div className="p-2 rounded bg-black/20 group-hover:bg-black/10 transition-colors">
+            <Icon size={24} />
+        </div>
+        <div className="flex flex-col text-left">
+            <span className="font-display font-bold text-lg leading-none mb-1">{label}</span>
+            <span className="font-mono text-[10px] opacity-70 tracking-wider uppercase">{sub}</span>
+        </div>
+    </motion.a>
+);
