@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
-import { CA, IMAGES, JUPITER_URL } from '../constants';
-import { Copy, Check, Terminal, Play } from 'lucide-react';
+import { CA, IMAGES, JUPITER_URL, X_COMMUNITY_URL } from '../constants';
+import { Copy, Check, Terminal, Play, Users } from 'lucide-react';
 import { motion, Variants } from 'framer-motion';
 
 export const Hero: React.FC = () => {
@@ -121,12 +121,13 @@ export const Hero: React.FC = () => {
                     <motion.a 
                         whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.1)" }}
                         whileTap={{ scale: 0.95 }}
-                        href="https://t.me/WhiteWhaleMeme"
+                        href={X_COMMUNITY_URL}
                         target="_blank"
                         rel="noreferrer"
-                        className="px-10 py-5 border border-slate-700 bg-slate-900/50 backdrop-blur transition-all rounded-sm w-full md:w-auto flex items-center justify-center"
+                        className="px-10 py-5 border border-slate-700 bg-slate-900/50 backdrop-blur transition-all rounded-sm w-full md:w-auto flex items-center justify-center gap-2"
                     >
-                        <span className="font-display font-bold text-white text-lg tracking-wider">JOIN TELEGRAM</span>
+                        <Users size={18} className="text-white" />
+                        <span className="font-display font-bold text-white text-lg tracking-wider">JOIN COMMUNITY</span>
                     </motion.a>
                 </motion.div>
 

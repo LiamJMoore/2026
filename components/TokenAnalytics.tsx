@@ -65,7 +65,7 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({ ca, initialMetri
   const [panicMode, setPanicMode] = useState(false);
 
   // Feature: Truth Nuke
-  const [currentHeadline, setCurrentHeadline] = useState("");
+  const [currentHeadline, setCurrentHeadline] = useState("V2 MIGRATION COMPLETE");
 
   // Security & Network
   const [security, setSecurity] = useState<TokenSecurity | null>(null);
@@ -397,9 +397,9 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({ ca, initialMetri
   const generateLiveHolders = () => {
     // We use full length placeholder addresses so Solscan links work (even if they 404, the format is valid and address bar is correct)
     const fallbackData = [
-        { addr: "Cfq3R2bWq3e5h7Y8j9k1m2n3p4q5r6s7t8u9v0bgZt", pct: 36.54, tag: "Raydium Pool" },
-        { addr: "8Uh2bWq3e5h7Y8j9k1m2n3p4q5r6s7t8u9v0TogC", pct: 8.00, tag: "Team Vesting" },
-        { addr: "G8C2bWq3e5h7Y8j9k1m2n3p4q5r6s7t8u9v0kqjm", pct: 5.75, tag: "Strategic Reserve" },
+        { addr: "Cfq3R2bWq3e5h7Y8j9k1m2n3p4q5r6s7t8u9v0bgZt", pct: 36.54, tag: "V2 Liquidity" },
+        { addr: "8Uh2bWq3e5h7Y8j9k1m2n3p4q5r6s7t8u9v0TogC", pct: 8.00, tag: "Community Reserve" },
+        { addr: "G8C2bWq3e5h7Y8j9k1m2n3p4q5r6s7t8u9v0kqjm", pct: 5.75, tag: "V2 Staking" },
         { addr: "9pk2bWq3e5h7Y8j9k1m2n3p4q5r6s7t8u9v0cXzv", pct: 3.50, tag: "Whale #1" },
         { addr: "9Wz2bWq3e5h7Y8j9k1m2n3p4q5r6s7t8u9v0AWWM", pct: 3.20, tag: "Whale #2" },
         { addr: "85W2bWq3e5h7Y8j9k1m2n3p4q5r6s7t8u9v05ERS", pct: 3.00, tag: "Exchange Wallet?" },
@@ -476,7 +476,7 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({ ca, initialMetri
   const answerBog = () => { setBogIncoming(false); const action = Math.random() > 0.5 ? "dump" : "pump"; setBogAction(action); setTimeout(() => setBogAction(null), 4000); };
   const handlePanic = () => { setPanicMode(true); setTimeout(() => setPanicMode(false), 2000); };
   const updateHeadline = () => {
-      const headlines = [ "INSIDER SAYS: WE ARE SO BACK", "JUSTIN SUN IS WATCHING", "SEC CONFIRMS: MEMES ARE SECURITIES", "DEV SOLD? IMPOSSIBLE", "CHINESE NEW YEAR + WALL STREET BONUSES INCOMING", "DO KWON TWEETED", "VITALIK JUST BRIDGED", "GOD CANDLE LOADING... 99%" ];
+      const headlines = [ "INSIDER SAYS: V2 IS LIVE", "JUSTIN SUN IS WATCHING", "SEC CONFIRMS: MEMES ARE SECURITIES", "DEV SOLD? IMPOSSIBLE", "WHITE WHALE V2 FLIPPING ETH", "DO KWON TWEETED", "VITALIK JUST BRIDGED", "GOD CANDLE LOADING... 99%", "COMMUNITY TAKEOVER COMPLETE" ];
       setCurrentHeadline(headlines[Math.floor(Math.random() * headlines.length)]);
   };
 

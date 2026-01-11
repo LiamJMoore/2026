@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Twitter, Send, Users, Zap, Brain } from 'lucide-react';
-import { X_URL, JUPITER_URL, X_COMMUNITY_URL, VISIONARY_URL } from '../constants';
+import { JUPITER_URL, X_COMMUNITY_URL, VISIONARY_URL } from '../constants';
 import { motion } from 'framer-motion';
 
 export const WarriorHub: React.FC = () => {
@@ -59,26 +59,12 @@ export const WarriorHub: React.FC = () => {
                             </h3>
                             
                             <p className="font-body text-slate-400 text-lg mb-8 leading-relaxed text-center md:text-left max-w-2xl">
-                                The war is fought in the trenches of X and Telegram. 
+                                The war is fought in the trenches of X. 
                                 We coordinate raids, share memes, and hold the line against the jeets.
                             </p>
                             
                             {/* Command Grid */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                <SocialLink 
-                                    href="https://t.me/WhiteWhaleMeme" 
-                                    icon={Send} 
-                                    label="TELEGRAM" 
-                                    sub="JOIN THE CHAT" 
-                                    color="bg-blue-600/20 border-blue-600 hover:bg-blue-600 hover:text-white text-blue-400"
-                                />
-                                <SocialLink 
-                                    href={X_URL} 
-                                    icon={Twitter} 
-                                    label="MAIN COMMS" 
-                                    sub="@WhiteWhaleMeme" 
-                                    color="bg-white/10 border-white/20 hover:bg-white hover:text-black text-white" 
-                                />
                                 <SocialLink 
                                     href={X_COMMUNITY_URL} 
                                     icon={Users} 
@@ -99,7 +85,6 @@ export const WarriorHub: React.FC = () => {
                                     label="BUY ON JUP" 
                                     sub="INITIATE SWAP" 
                                     color="bg-neon-cyan/10 border-neon-cyan hover:bg-neon-cyan hover:text-black text-neon-cyan shadow-[0_0_10px_rgba(0,243,255,0.1)]" 
-                                    className="sm:col-span-2 lg:col-span-2"
                                 />
                             </div>
 

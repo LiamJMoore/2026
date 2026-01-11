@@ -4,23 +4,19 @@ export const HELIUS_API_KEY = 'f7d6a830-5ce4-436e-bd8d-73f75b0f0c52';
 export const HELIUS_RPC_URL = `https://mainnet.helius-rpc.com/?api-key=${HELIUS_API_KEY}`;
 
 // Project Data
-export const CA = 'a3W4qutoEJA4232T2gwZUfgYJTetr96pU4SJMwppump';
+export const CA = '7niUipEFpiH2DWt7aWkKhmjXgc24vYKKVJ46UpYtpump';
 export const TREASURY_WALLET = 'EBxgMjihSYK1UsfsJtNUhYq6RvuzYh5qFzQVfKew79cb';
-export const DEX_URL = 'https://dexscreener.com/solana/a3W4qutoEJA4232T2gwZUfgYJTetr96pU4SJMwppump';
-export const JUPITER_URL = 'https://jup.ag/tokens/a3W4qutoEJA4232T2gwZUfgYJTetr96pU4SJMwppump';
+export const DEX_URL = 'https://dexscreener.com/solana/7niUipEFpiH2DWt7aWkKhmjXgc24vYKKVJ46UpYtpump';
+export const JUPITER_URL = 'https://jup.ag/tokens/7niUipEFpiH2DWt7aWkKhmjXgc24vYKKVJ46UpYtpump';
 
-// Market Addresses
-export const MARKETS = [
-    'Fv9w9TQnqhzUszbDGRFPPkXwu5iJWG9VytmMJTCTnjxW',
-    '1tp17UKDhVbdfj5NSXjDyvsVD2UcRSsBqNkHqmqxPpL',
-    'CE4wHeDdSNsXp5hD1o3S1ujLQtn6fqJYFy91Hknp4HPR',
-    '4qxSqMh6iEdbdvtMp8r5MK2psAGKNk57PfGeVo2VhczQ',
-    'EFeysyAM1mB8oT3FpK9xZsZRc8JRaj24g1XDSrg1VjSu'
+// Market Addresses - Cleared for V2 launch as new pools will be created
+export const MARKETS: string[] = [
+    // Add new V2 pool addresses here when available
 ];
 
 // Socials
 export const X_URL = 'https://x.com/WhiteWhaleMeme';
-export const X_COMMUNITY_URL = 'https://x.com/i/communities/1997736986749124846';
+export const X_COMMUNITY_URL = 'https://x.com/i/communities/2010059520723300676';
 export const VISIONARY_URL = 'https://x.com/TheWhiteWhaleV2';
 export const MEME_DEPOT_URL = 'https://memedepot.com/d/white-whale';
 

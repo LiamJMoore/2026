@@ -29,7 +29,7 @@ export const Navbar: React.FC = () => {
                     <div className="flex items-center gap-3">
                         <img src={IMAGES.LOGO_SQUARE} alt="White Whale Logo" className="h-10 w-10 rounded-sm border border-cyan-800" />
                         <span className="font-display font-bold text-xl tracking-widest text-white">
-                            WHITE<span className="text-neon-cyan">WHALE</span>
+                            WHITE<span className="text-neon-cyan">WHALE V2</span>
                         </span>
                     </div>
 
