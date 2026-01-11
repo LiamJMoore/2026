@@ -1,7 +1,6 @@
-
 import React from 'react';
-import { X_COMMUNITY_URL } from '../constants';
-import { Twitter, ArrowUp, Users } from 'lucide-react';
+import { X_URL } from '../constants';
+import { Twitter, ArrowUp } from 'lucide-react';
 
 export const Footer: React.FC = () => {
     const scrollToTop = () => {
@@ -14,13 +13,12 @@ export const Footer: React.FC = () => {
                 
                 <div className="flex gap-6 mb-8">
                     <a 
-                        href={X_COMMUNITY_URL} 
+                        href={X_URL} 
                         target="_blank" 
                         rel="noreferrer" 
                         className="w-12 h-12 bg-cyan-950 hover:bg-neon-cyan flex items-center justify-center rounded-full transition-all text-white hover:text-black hover:shadow-[0_0_15px_#00f3ff]"
-                        title="Join the Community"
                     >
-                        <Users />
+                        <Twitter />
                     </a>
                 </div>
 

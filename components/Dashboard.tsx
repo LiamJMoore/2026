@@ -7,6 +7,7 @@ import { TokenStats, TreasuryPortfolio, MarketPairData, Rank } from '../types';
 import { Activity, Shield, ExternalLink, Copy, Check, Wallet, Radar, Crosshair, Trophy, Zap, PlayCircle, RotateCcw, Link } from 'lucide-react';
 import { BarChart, Bar, ResponsiveContainer, Tooltip, PieChart, Pie, Cell } from 'recharts';
 import { motion, AnimatePresence } from 'framer-motion';
+import { TokenAnalytics } from './TokenAnalytics';
 import { ServiceRecord } from './ServiceRecord';
 
 // Mock chart data for visuals
@@ -327,7 +328,10 @@ export const Dashboard: React.FC = () => {
                     <ServiceRecord onRankChange={setUserRank} />
                 </motion.div>
 
-                {/* Token Analytics Component - REMOVED AS REQUESTED */}
+                {/* Token Analytics Component */}
+                <div className="mb-12">
+                    <TokenAnalytics ca={CA} />
+                </div>
 
                 <motion.div 
                     initial="hidden"

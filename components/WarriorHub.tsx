@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
-import { Users, Zap } from 'lucide-react';
-import { JUPITER_URL, X_COMMUNITY_URL } from '../constants';
+import { Twitter, Send, Users, Zap, Brain } from 'lucide-react';
+import { JUPITER_URL, X_COMMUNITY_URL, VISIONARY_URL } from '../constants';
 import { motion } from 'framer-motion';
 
 export const WarriorHub: React.FC = () => {
@@ -64,13 +64,20 @@ export const WarriorHub: React.FC = () => {
                             </p>
                             
                             {/* Command Grid */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                                 <SocialLink 
                                     href={X_COMMUNITY_URL} 
                                     icon={Users} 
                                     label="X COMMUNITY" 
                                     sub="THE TRENCH" 
                                     color="bg-slate-800/50 border-slate-600 hover:border-slate-400 text-slate-300 hover:text-white" 
+                                />
+                                <SocialLink 
+                                    href={VISIONARY_URL} 
+                                    icon={Brain} 
+                                    label="VISIONARY" 
+                                    sub="@TheWhiteWhaleV2" 
+                                    color="bg-purple-900/20 border-purple-500 hover:bg-purple-500 hover:text-white text-purple-400" 
                                 />
                                 <SocialLink 
                                     href={JUPITER_URL} 
