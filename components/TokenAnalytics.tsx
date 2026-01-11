@@ -65,7 +65,7 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({ ca, initialMetri
   const [panicMode, setPanicMode] = useState(false);
 
   // Feature: Truth Nuke
-  const [currentHeadline, setCurrentHeadline] = useState("V2 MIGRATION COMPLETE");
+  const [currentHeadline, setCurrentHeadline] = useState("V2 LAUNCH SUCCESSFUL");
 
   // Security & Network
   const [security, setSecurity] = useState<TokenSecurity | null>(null);
@@ -240,7 +240,7 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({ ca, initialMetri
   };
 
   const generateFakeMemos = (): Memo[] => {
-      const phrases = ["dev is based", "top signal?", "wen binance", "holding since 4k mcap", "just aped 50 sol", "jeet checks out", "pump it pajeet", "looks rare"];
+      const phrases = ["v2 is based", "top signal?", "wen binance", "holding since day 1", "just aped 50 sol", "jeet checks out", "pump it pajeet", "looks rare"];
       return Array(10).fill(0).map((_, i) => ({ 
           signature: randomStr(88), // Realistic sig length
           message: phrases[Math.floor(Math.random() * phrases.length)], 
@@ -365,7 +365,7 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({ ca, initialMetri
                 // dynamically in the HoldersTab component using live price/supply props.
                 let tag = undefined;
                 if (index === 0) tag = "Raydium/LP"; 
-                if (index === 1) tag = "Team Vesting";
+                if (index === 1) tag = "Community Reserve";
                 
                 const { date, isOldfag, daysHeld } = getHeldSince(index + 1, acc.address);
                 
@@ -476,7 +476,7 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({ ca, initialMetri
   const answerBog = () => { setBogIncoming(false); const action = Math.random() > 0.5 ? "dump" : "pump"; setBogAction(action); setTimeout(() => setBogAction(null), 4000); };
   const handlePanic = () => { setPanicMode(true); setTimeout(() => setPanicMode(false), 2000); };
   const updateHeadline = () => {
-      const headlines = [ "INSIDER SAYS: V2 IS LIVE", "JUSTIN SUN IS WATCHING", "SEC CONFIRMS: MEMES ARE SECURITIES", "DEV SOLD? IMPOSSIBLE", "WHITE WHALE V2 FLIPPING ETH", "DO KWON TWEETED", "VITALIK JUST BRIDGED", "GOD CANDLE LOADING... 99%", "COMMUNITY TAKEOVER COMPLETE" ];
+      const headlines = [ "V2 MIGRATION COMPLETE", "COMMUNITY TAKEOVER CONFIRMED", "WHALES ACCUMULATING V2", "JEETS SHAKEN OUT", "LIQUIDITY LOCKED & LOADED", "GOD CANDLE LOADING... 99%", "ETHICAL STEWARDSHIP ACTIVE" ];
       setCurrentHeadline(headlines[Math.floor(Math.random() * headlines.length)]);
   };
 
